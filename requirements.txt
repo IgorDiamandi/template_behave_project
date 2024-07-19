@@ -1,0 +1,4 @@
+Flask==2.0.1
+Flask-WTF==1.0.0
+selenium==3.141.0
+behave==1.2.6

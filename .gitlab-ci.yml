@@ -1,0 +1,31 @@
+# .gitlab-ci.yml
+
+stages:
+  - test
+
+variables:
+  # Define a global variable for your WebDriver path if needed
+  WEBDRIVER_PATH: "/usr/local/bin/chromedriver"
+
+# Use an official Python image to run the tests
+image: python:3.11
+
+# Cache pip dependencies to speed up the build process
+cache:
+  paths:
+    - .cache/pip
+
+before_script:
+  - pip install --upgrade pip
+  - pip install -r requirements.txt
+  - pip install selenium behave
+  - wget -N https://chromedriver.storage.googleapis.com/$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE)/chromedriver_linux64.zip -P /tmp/
+  - unzip /tmp/chromedriver_linux64.zip -d /usr/local/bin/
+  - chmod +x /usr/local/bin/chromedriver
+  - apt-get update
+  - apt-get install -y xvfb
+
+test:
+  stage: test
+  script:
+    - xvfb-run --server-args="-screen 0 1920x1080x24" behave
