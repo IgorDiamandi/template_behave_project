@@ -15,9 +15,13 @@ cache:
 before_script:
   - apt-get update
   - apt-get install -y wget unzip xvfb
+  - apt-get install -y libglib2.0-0 libnss3 libgconf-2-4 libfontconfig1
+  - apt-get install -y curl
   - pip install --upgrade pip
   - pip install -r requirements.txt
   - pip install selenium behave
+  - wget -N https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+  - dpkg -i google-chrome-stable_current_amd64.deb || apt-get -fy install
   - wget -N https://chromedriver.storage.googleapis.com/$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE)/chromedriver_linux64.zip -P /tmp/
   - unzip /tmp/chromedriver_linux64.zip -d /usr/local/bin/
   - chmod +x /usr/local/bin/chromedriver

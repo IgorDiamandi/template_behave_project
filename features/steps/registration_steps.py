@@ -4,9 +4,14 @@ from selenium.webdriver.common.by import By
 import time
 import app
 import threading
+import os
 
 # Global driver
 driver = None
+
+def start_flask_app():
+    os.environ["WERKZEUG_RUN_MAIN"] = 'true'
+    app.create_app().run()
 
 @given('I am on the registration page')
 def step_given_on_registration_page(context):
@@ -18,7 +23,8 @@ def step_given_on_registration_page(context):
     context.app.config['WTF_CSRF_ENABLED'] = False
 
     # Start the Flask server in a separate thread
-    context.server_thread = threading.Thread(target=context.app.run, kwargs={'use_reloader': False})
+    context.server_thread = threading.Thread(target=start_flask_app)
+    context.server_thread.daemon = True
     context.server_thread.start()
 
     # Initialize the Selenium WebDriver
